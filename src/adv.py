@@ -1,4 +1,6 @@
+# Imports
 from room import Room
+from player import Player
 
 # Declare all the rooms
 
@@ -37,7 +39,19 @@ room['treasure'].s_to = room['narrow']
 # Main
 #
 
+# answer = input('Would you like to start your mini-adventure? (yes/no')
+
+# if answer.lower().strip() == "yes":
+
+#     answer = input("Excellent! Your starting point is outside the cave entrance.")
+
+# else:
+#     print('Thats cool too.')
+
+
 # Make a new player object that is currently in the 'outside' room.
+
+player = Player('Erdrick', room['outside'])
 
 # Write a loop that:
 #
@@ -49,3 +63,22 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+
+while True:
+    print(player.current_room.name, player.current_room.description)
+    command = input('Which direction would you like to move? [n] North, [e] East, [s] South, [w] West, or [q] Quit')
+    if command == 'q':
+        break
+    # elif player.current_room
+    # elif player.current_room
+    # elif player.current_room
+    # elif player.current_room
+    # elif player.current_room
+    # elif player.current_room
+    # elif player.current_room
+    print(command)
+    
+    # if command.lower().strip() == "n":
+
+    # if command == input(n)
+
