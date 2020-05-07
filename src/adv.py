@@ -2,39 +2,26 @@
 from room import Room
 from player import Player
 
-# Declare all the rooms
+# Declare all the rooms and link them together
 
-room = {
+rooms = {
     'outside':  Room("Outside Cave Entrance",
-                     "NORTH of you, the cave mount beckons"),
+                     "NORTH of you, the cave mount beckons", ['foyer', None, None, None]),
 
     'foyer':    Room("Foyer", """Dim light filters in from the SOUTH. Dusty
-passages run NORTH and EAST."""),
+passages run NORTH and EAST.""", ['overlook', 'narrow', 'outside', None]),
 
     'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
 into the darkness. Ahead to the NORTH, a light flickers in
-the distance, but there is no way across the chasm."""),
+the distance, but there is no way across the chasm.""", [None, None, 'foyer', None]),
 
     'narrow':   Room("Narrow Passage", """The narrow passage bends here from WEST
-to NORTH. The smell of gold permeates the air."""),
+to NORTH. The smell of gold permeates the air.""", ['treasure', None, None, 'foyer']),
 
     'treasure': Room("Treasure Chamber", """You've found the long-lost treasure chamber! 
 Sadly, it has already been completely emptied by earlier adventurers. 
-The ground shakes heavy under your feet and the rocks block the path you came in, so you should feel bad. 
-To escape with your life, you can dig a hole SOUTH to see where it leads you."""),
+""", [None, None, 'narrow', None])
 }
-
-
-# Link rooms together
-
-room['outside'].n_to = room['foyer']
-room['foyer'].s_to = room['outside']
-room['foyer'].n_to = room['overlook']
-room['foyer'].e_to = room['narrow']
-room['overlook'].s_to = room['foyer']
-room['narrow'].w_to = room['foyer']
-room['narrow'].n_to = room['treasure']
-room['treasure'].s_to = room['foyer']
 
 #
 # Main
@@ -51,8 +38,8 @@ room['treasure'].s_to = room['foyer']
 
 
 # Make a new player object that is currently in the 'outside' room.
-
-new_player = Player('Erdrick', room['outside'])
+# you can make name = input later?
+new_player = Player('Erdrick', rooms['outside'])
 
 # Write a loop that:
 #
@@ -73,31 +60,8 @@ while True:
 
     if command == 'q':
         break
-
-    elif new_player.current_room.name == room["outside"].name and command == 'n':
-        new_player.current_room = room['outside'].n_to
-
-    elif new_player.current_room.name == room["foyer"].name and command == 'n':
-        new_player.current_room = room['foyer'].n_to
-
-    elif new_player.current_room.name == room["foyer"].name and command == 's':
-        new_player.current_room = room['foyer'].s_to
-
-    elif new_player.current_room.name == room["foyer"].name and command == 'e':
-        new_player.current_room = room['foyer'].e_to
-
-    elif new_player.current_room.name == room["overlook"].name and command == 's':
-        new_player.current_room = room['overlook'].s_to
-
-    elif new_player.current_room.name == room["narrow"].name and command == 'n':
-        new_player.current_room = room['narrow'].n_to
-
-    elif new_player.current_room.name == room["narrow"].name and command == 'w':
-        new_player.current_room = room['narrow'].w_to
-
-    elif new_player.current_room.name == room["treasure"].name and command == 's':
-        new_player.current_room = room['narrow'].w_to
-
-    else:
-        print("THIS IS NOT A VALID DIRECTION. You have opted to think it over some more.")
-
+    if command in ['n', 's', 'e', 'w']:
+        new_room = new_player.move_to(command)
+        if new_room != None:
+            new_player.current_room = rooms[new_room]
+        continue
