@@ -6,21 +6,22 @@ from player import Player
 
 room = {
     'outside':  Room("Outside Cave Entrance",
-                     "North of you, the cave mount beckons"),
+                     "NORTH of you, the cave mount beckons"),
 
-    'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
-passages run north and east."""),
+    'foyer':    Room("Foyer", """Dim light filters in from the SOUTH. Dusty
+passages run NORTH and EAST."""),
 
     'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
-into the darkness. Ahead to the north, a light flickers in
+into the darkness. Ahead to the NORTH, a light flickers in
 the distance, but there is no way across the chasm."""),
 
-    'narrow':   Room("Narrow Passage", """The narrow passage bends here from west
-to north. The smell of gold permeates the air."""),
+    'narrow':   Room("Narrow Passage", """The narrow passage bends here from WEST
+to NORTH. The smell of gold permeates the air."""),
 
-    'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
-chamber! Sadly, it has already been completely emptied by
-earlier adventurers. The only exit is to the south."""),
+    'treasure': Room("Treasure Chamber", """You've found the long-lost treasure chamber! 
+Sadly, it has already been completely emptied by earlier adventurers. 
+The ground shakes heavy under your feet and the rocks block the path you came in, so you should feel bad. 
+To escape with your life, you can dig a hole SOUTH to see where it leads you."""),
 }
 
 
@@ -33,7 +34,7 @@ room['foyer'].e_to = room['narrow']
 room['overlook'].s_to = room['foyer']
 room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
-room['treasure'].s_to = room['narrow']
+room['treasure'].s_to = room['foyer']
 
 #
 # Main
@@ -51,7 +52,7 @@ room['treasure'].s_to = room['narrow']
 
 # Make a new player object that is currently in the 'outside' room.
 
-player = Player('Erdrick', room['outside'])
+new_player = Player('Erdrick', room['outside'])
 
 # Write a loop that:
 #
@@ -65,20 +66,38 @@ player = Player('Erdrick', room['outside'])
 # If the user enters "q", quit the game.
 
 while True:
-    print(player.current_room.name, player.current_room.description)
-    command = input('Which direction would you like to move? [n] North, [e] East, [s] South, [w] West, or [q] Quit')
+    print("Current room:", new_player.current_room.name)
+    print(new_player.current_room.description)
+
+    command = input('Which direction would you like to move? [n] North, [e] East, [s] South, [w] West, or [q] Quit\n')
+
     if command == 'q':
         break
-    # elif player.current_room
-    # elif player.current_room
-    # elif player.current_room
-    # elif player.current_room
-    # elif player.current_room
-    # elif player.current_room
-    # elif player.current_room
-    print(command)
-    
-    # if command.lower().strip() == "n":
 
-    # if command == input(n)
+    elif new_player.current_room.name == room["outside"].name and command == 'n':
+        new_player.current_room = room['outside'].n_to
+
+    elif new_player.current_room.name == room["foyer"].name and command == 'n':
+        new_player.current_room = room['foyer'].n_to
+
+    elif new_player.current_room.name == room["foyer"].name and command == 's':
+        new_player.current_room = room['foyer'].s_to
+
+    elif new_player.current_room.name == room["foyer"].name and command == 'e':
+        new_player.current_room = room['foyer'].e_to
+
+    elif new_player.current_room.name == room["overlook"].name and command == 's':
+        new_player.current_room = room['overlook'].s_to
+
+    elif new_player.current_room.name == room["narrow"].name and command == 'n':
+        new_player.current_room = room['narrow'].n_to
+
+    elif new_player.current_room.name == room["narrow"].name and command == 'w':
+        new_player.current_room = room['narrow'].w_to
+
+    elif new_player.current_room.name == room["treasure"].name and command == 's':
+        new_player.current_room = room['narrow'].w_to
+
+    else:
+        print("THIS IS NOT A VALID DIRECTION. You have opted to think it over some more.")
 
