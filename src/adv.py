@@ -73,7 +73,7 @@ while True:
     if command == 'i':
         if len(new_player.inventory) > 0:
             player_items = ', '.join(new_player.inventory)
-            print("Items in iventory: %s" % (player_items))
+            print("Items in inventory: %s" % (player_items))
         else:
             print("You got nothin...")
     
