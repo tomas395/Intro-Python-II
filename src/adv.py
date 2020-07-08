@@ -1,44 +1,39 @@
-# Imports
-from room import Room
 from player import Player
-
-# Declare all the rooms and link them together
+from room import Room
 
 rooms = {
-    'outside':  Room("Outside Cave Entrance",
-                     "NORTH of you, the cave mount beckons", ['foyer', None, None, None], ['wooden broad sword']),
+    'outside':  Room("Outside Cave Entrance.",
+                     "To the NORTH of you, the cave mount beckons!", ['foyer', None, None, None]),
 
-    'foyer':    Room("Foyer", """Dim light filters in from the SOUTH. Dusty
-passages run NORTH and EAST.""", ['overlook', 'narrow', 'outside', None], ['shield']),
+    'foyer':    Room("Foyer.", """\nDim light filters in from the SOUTH and dusty
+passages run NORTH and EAST...""", ['overlook', 'narrow', 'outside', None]),
 
-    'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
-into the darkness. Ahead to the NORTH, a light flickers in
-the distance, but there is no way across the chasm.""", [None, None, 'foyer', None], ['torch']),
+    'overlook': Room("Grand Overlook.", """\nA steep cliff appears before you, falling
+into the darkness. Ahead to the north, a light flickers in
+the distance, but it's a shame there is no way across the chasm.""", [None, None, 'foyer', None]),
 
-    'narrow':   Room("Narrow Passage", """The narrow passage bends here from WEST
-to NORTH. The smell of gold permeates the air.""", ['treasure', None, None, 'foyer'], []), 
+    'narrow':   Room("Narrow Passage.", """\nThe narrow passage bends here from WEST
+to NORTH. The smell of gold permeates the air.""", ['treasure', None, None, 'foyer']),
 
-    'treasure': Room("Treasure Chamber", """You've found the long-lost treasure chamber! 
-Sadly, it has already been completely emptied by earlier adventurers. 
-""", [None, None, 'narrow', None], [])
+    'treasure': Room("Treasure Chamber.", """\nYou've found the long-lost treasure
+chamber!!! Sadly, it has already been completely emptied by
+earlier adventurers. The only exit is to the SOUTH.""", [None, None, 'narrow', None]),
 }
 
-#
-# Main
-#
 
-# answer = input('Would you like to start your mini-adventure? (yes/no')
+# Link rooms together
 
-# if answer.lower().strip() == "yes":
-
-#     answer = input("Excellent! Your starting point is outside the cave entrance.")
-
-# else:
-#     print('Thats cool too.')
+# room['outside'].n_to = room['foyer']
+# room['foyer'].s_to = room['outside']
+# room['foyer'].n_to = room['overlook']
+# room['foyer'].e_to = room['narrow']
+# room['overlook'].s_to = room['foyer']
+# room['narrow'].w_to = room['foyer']
+# room['narrow'].n_to = room['treasure']
+# room['treasure'].s_to = room['narrow']
 
 
 # Make a new player object that is currently in the 'outside' room.
-# you can make name = input later?
 new_player = Player('Erdrick', rooms['outside'])
 
 # Write a loop that:
@@ -53,48 +48,14 @@ new_player = Player('Erdrick', rooms['outside'])
 # If the user enters "q", quit the game.
 
 while True:
-    print('\033[1;33;40mCurrent room:', new_player.current_room.name)
-    if new_player.current_room.name == 'Treasure Chamber': 
-        if 'torch' in new_player.inventory:
-            print(new_player.current_room.description)
-        else:
-            print("It's too dark to see!")
-    else: 
-        print(new_player.current_room.description)
-
-    if len(new_player.current_room.items) > 0:
-        items_in_room = ', '.join(new_player.current_room.items)
-        print("You notice %s here." % (items_in_room))
-    command = input('\033[1;32;40mWhich direction would you like to move? [n] North, [e] East, [s] South, [w] West, or [q] Quit\n')
-
-    if command == 'q':
+    print('\033[1;33;40mYou are now in the',
+          new_player.current_room.name, new_player.current_room.description)
+    player_input = input(
+        '\n\033[1;33;40mPress which direction you would like to move:  [n] North, [e] East, [s] South, [w] West, or [q] Quit\n')
+    if player_input == 'q':
         print("\033[1;31;40mYou have opted to quit.\n")
         break
-    if command == 'i':
-        if len(new_player.inventory) > 0:
-            player_items = ', '.join(new_player.inventory)
-            print("Items in inventory: %s" % (player_items))
-        else:
-            print("You got nothin...")
-    
-    if command in ['n', 's', 'e', 'w']:
-        new_room = new_player.move_to(command)
-        if new_room != None:
-            new_player.current_room = rooms[new_room]
-        continue
-    if command[:4] == 'get ':
-        item_name = command [4:len(command)]
-        if item_name in new_player.current_room.items:
-            new_player.inventory.append(item_name)
-            new_player.current_room.items.remove(item_name)
-            print("You got the %s." %(item_name))
-        else:
-            print("There is no %s in the room." % (item_name))
-    if command[:5] == 'drop ':
-        item_name = command [5:len(command)]
-        if item_name in new_player.inventory:
-            new_player.inventory.remove(item_name)
-            new_player.current_room.items.append(item_name)
-            print("You've dropped the %s." %(item_name))
-        else:
-            print("You dont have a %s, man..." % (item_name))
+    if player_input in ['n', 's', 'e', 'w']:
+        new_room = new_player.move_to(player_input)
+    if new_room != None:
+        new_player.current_room = rooms[new_room]
