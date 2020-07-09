@@ -1,16 +1,18 @@
-class Player():
+class Player:
 
     def __init__(self, name, current_room):
         self.current_room = current_room
+        self.inventory = []
+        self.name = name
 
-    def move_to(self, c_direction):
-        if c_direction == 'n':
+    def move_to(self, direction):
+        if direction == 'n':
             room_index = 0
-        elif c_direction == 'e':
+        elif direction == 'e':
             room_index = 1
-        elif c_direction == 's':
+        elif direction == 's':
             room_index = 2
-        elif c_direction == 'w':
+        elif direction == 'w':
             room_index = 3
 
         if self.current_room.exits[room_index] == None:
